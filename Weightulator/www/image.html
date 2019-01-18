@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<!--<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />-->
+<script src="javascript/functions.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/numerics126.js"></script>    
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    (function(window, document, undefined){
+    window.onload=function abd(){
+    var aatt=JSON.parse(localStorage["gcdata"]);
+    var nn=JSON.parse(localStorage["plotdataName"]); 
+     var A=aatt;
+        google.load("visualization", "1", {packages:["corechart"],callback: drawChart});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+            console.log("drawChart");
+            var data = google.visualization.arrayToDataTable(A);
+     
+            var options = {
+                title: nn,
+                vAxis: {title: "Weight"},
+                hAxis: {title: "Timeframe"}
+            };
+     
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        document.getElementById("loading").style.display="none";
+            chart.draw(data, options);}
+     };})(window, window.document);
+        
+    
+        (function(window, document, undefined){
+         window.onorientationchange=function abd(){
+         var aatt=JSON.parse(localStorage["gcdata"]);
+         var nn=JSON.parse(localStorage["plotdataName"]);
+         var A=aatt;
+         google.load("visualization", "1", {packages:["corechart"],callback: drawChart});
+         google.setOnLoadCallback(drawChart);
+         function drawChart() {
+         console.log("drawChart");
+         var data = google.visualization.arrayToDataTable(A);
+         
+         var options = {
+         title: nn,
+         vAxis: {title: "Weight"},
+         hAxis: {title: "Timeframe"}
+         };
+         document.getElementById("chart_div").style.width=((window.innerWidth).toString()).concat("px");
+         document.getElementById("chart_div").style.height=((window.innerHeight).toString()).concat("px");
+         
+         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+         document.getElementById("loading").style.display="none";
+         chart.draw(data, options);}
+         };})(window, window.document);
+        </script>
+</head>
+
+<body>
+<div id="loading" class="loading-invisible">
+    <p><img src="images/loading (2).gif" width="300px" height="460px" align="center" alt="Loading..."/></p>
+</div>
+<div id="chart_div" style="width:95%;height:95%"></div>
+<div><a href="page.html">Go back</a></div>
+</body>
+
+</html>

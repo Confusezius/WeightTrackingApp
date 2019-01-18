@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<head>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+    <meta content="keyword1,keyword2,keyword3" name="keywords" />
+    <meta content="Description of your page" name="description" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="css/jquery-ui.css">
+        <link rel="stylesheet" href="jmob/jquery.mobile-1.3.1.css">
+        <link rel="stylesheet" href="css/mycss.css">                
+            <script type="text/javascript" src="js/index.js"></script>
+            <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+            <script type="text/javascript" src="js/jquery-ui.js"></script>
+            <script type="text/javascript" src="jmob/jquery.mobile-1.3.1.js"></script>
+            <script type="text/javascript" src="js/jquery.flot.pack.js"></script>
+            <script type="text/javascript" src="js/numerics126.js"></script>
+            <script type="text/javascript" src="js/cordova.js"></script>
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <style>
+        #pp9 {
+            background: url('img/wbb.jpg');
+            background-repeat:repeat-y;
+            background-position:center center;
+            background-attachment:scroll;
+            background-size:cover;
+            background-attachment:fixed;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pp9" data-role="page">
+        <script>
+            $(document).on("pageinit",function(){
+                         if(localStorage.getItem("check")!=null){
+                         var tt=JSON.parse(localStorage["sv"]);
+                         $("#harlem").val(tt);}
+                           });
+            function seltt(){
+                var idx = $('#gangnam').val();
+                alert(idx);
+                if(idx==1){
+                    Retr();
+                }else if(idx==2){
+                    Save();
+                }else if(idx==3){
+                    Del();
+                }
+            }
+            function Save(){
+                var td = $("#harlem").val();
+                alert(td);
+                var sv = td.split(",");
+                alert(sv);
+                var check=true;
+                localStorage.setItem("check",check);
+                localStorage["sv"]=JSON.stringify(sv);
+                var ttl = (sv.length) % 2;
+                if(sv==""){
+                    alert("hi");
+                    $("#harlem").css('background-color',"gray");
+                    $("#harlem").prop("disabled", true);
+                }
+                else if(ttl!=0){
+                    alert("Invalid data length!");
+                }else if(sv.length<4){
+                    alert("Need more data!");
+                }
+                else{
+                    var abl=(sv.length)/2;
+                    var Hf1=new Array(abl);var Hf2=new Array(abl);
+                    for (var i=0; i<(abl); i++){
+                        Hf1[i]=sv[2*i];
+                        Hf2[i]=sv[2*i+1];
+                    }
+                    alert(Hf2);
+                    localStorage["Hf1"]=JSON.stringify(Hf1);
+                    localStorage["Hf2"]=JSON.stringify(Hf2);
+                    $("#harlem").prop("disabled", true);
+                }
+            }
+            function Retr(){
+                $("#harlem").prop("disabled", false);
+            }
+            function Del(){
+                var ang = confirm("Delete all data?");
+                if (ang == true){
+                    localStorage.removeItem("sv");
+                    $("#harlem").val("");
+                    $("#harlem").prop("disabled", true);
+                }else{
+                    return false;
+                }
+            }
+            
+            </script>
+        <div data-role="panel" data-display="overlay" id="mypanel2" data-position="right" class="lok">
+            <ul data-role="listview">
+                <!--<li data-icon="arrow-l"><a href="#" data-rel="close">Close</a></li>-->
+                <li data-role="list-divider" data-theme="a" style="background:rgba(0,0,0,1)">Easy Table</li>
+                <li data-icon="false"><a href="page.html" data-transition="slideup" data-ajax="false">Graphs</a></li>
+                <li data-icon="false"><a href="page3.html" data-transition="slideup" data-ajax="false">Aims</a></li>
+                <li data-icon="false"><a href="plotlibrary.html" data-transition="slideup" data-ajax="false">Graph Library</a></li>
+            </ul>
+        </div>
+        <div class="bottomline" style="overflow:hidden">
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:left;background:rgba(0,0,0,0.85); height:35px" id="one"><i class="icon-globe icon-white" style="left:5px;"></i>
+                My Place
+            </div>
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:right;background:rgba(0,0,0,0.85); height:35px;" id="three"><i class="icon-th icon-white" style="left:5px;"></i>
+                Workplace
+            </div>
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; border: 2px solid grey;width:34%; margin:0 auto;background:rgba(0,0,0,0.85); height:35px;z-index:9000" id="two">
+                <i class="icon-list icon-white" style="left:5px;"></i>
+                Menu
+            </div>
+        </div>
+        <script>
+            $("#three").click(function(){
+                              $("#mypanel2").panel("open");
+                              });
+            $("#two").click(function(){
+                            $("#pptt").popup("open",{theme:"e"});
+                            });
+            $("#one").click(function(){
+                            window.location.href = "index.html";
+                            });
+            
+            </script>
+        <h3> Easy Data Table </h3>
+        <div data-role="fieldcontain">
+            <select name="gangnam" id="gangnam" data-shadow="false" data-corners="false" onchange="seltt()">
+                <option value="1">Edit Data</option>
+                <option value="2">Save Data</option>
+                <option value="3">Delete Data</option>
+            </select>
+        </div>
+        <textarea cols="40" rows="8"  style="width:100%" name="harlem" id="harlem"></textarea>
+        </div>
+
+</body>
+
+</html>

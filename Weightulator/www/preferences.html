@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="javascript/bootstrap.min.js"></script>
+        <link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
+        <script src="javascript/functions.js" type="text/javascript"></script>
+        <meta content="keyword1,keyword2,keyword3" name="keywords" />
+        <meta content="Description of your page" name="description" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script src="javascript/jquery.js" language="javascript" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/jquery-ui.css">
+            <script src="javascript/jquery-1.8.2.js"></script>
+            <script src="javascript/jquery-ui.js"></script>
+            <script src="javascript/jquery.flot.pack.js" language="javascript" type="text/javascript"></script>
+            <script type="text/javascript" src="javascript/numerics126.js"></script>
+            <script type="text/javascript" src="javascript/cordova-2.3.0.js"></script> 
+</head>
+<script type="text/javascript">
+    function UseGC(){
+        if(document.getElementById("checkbo").checked==true){
+            var cb1 = "GooglechartsOn";
+            localStorage.setItem("cb1",cb1);
+        }else{
+            var cb1 ="GooglechartsOff";
+            localStorage.setItem("cb1",cb1);
+        }
+    }
+    function hide(){
+        if(document.getElementById("checkbo2").checked==true){
+            var cb2 = "goldroger234";
+            localStorage.setItem("cb2",cb2);
+        }else{
+            var cb2 ="nogoldroger123";
+            localStorage.setItem("cb2",cb2);
+        }
+    }
+    function hide2(){
+        var retrOb = localStorage.getItem("cb2");
+        var gcOb   = localStorage.getItem("cb1");
+        if(retrOb=="null"){
+            document.getElementById("checkbo2").checked=false;
+        }else if(retrOb=="goldroger234"){
+            document.getElementById("checkbo2").checked=true;
+        }
+        if(gcOb=="null"){
+            document.getElementById("checkbo").checked=false;
+        }else if(gcOb=="GooglechartsOn"){
+            document.getElementById("checkbo").checked=true;
+        }
+    }
+    function Reset(){
+        var rest = confirm("Are you sure?");
+        if(rest==true){
+            localStorage.clear()
+        }
+    }
+</script>
+<body onload="hide2()">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <ul class="nav">
+                <li><a href="index.html"><i class="icon-home icon-white"></i></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <ul class="pageitem">
+        <li class="menu">
+            <a href="addcont.html">
+                    <span class="name">Change Appearance</span>
+                    <span class="comment"></span>
+                    <span class="arrow"></span>
+                    </a>
+        </li>
+        <li class="menu">
+            <a href="addcont.html">
+                    <span class="name">Language</span>
+                    <span class="comment"></span>
+                    <span class="arrow"></span>
+                    </a>
+        </li>
+            <li class="checkbox"><span class="name">Google Charts</span><input id="checkbo" name="checkbo" type="checkbox" onchange="UseGC()"/> </li>
+            <li class="checkbox"><span class="name">Hide Intro</span><input id="checkbo2" name="checkbo2" type="checkbox" onclick="hide()"/> </li>
+    </ul>
+    <ul class="pageitem">
+        <li class="button">
+            <input type="button" value="Reset" id="reset" onclick="Reset()">
+        </li>
+    </ul>
+
+</body>
+    
+</script>
+</html>

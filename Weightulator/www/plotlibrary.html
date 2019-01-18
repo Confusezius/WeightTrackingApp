@@ -1,0 +1,486 @@
+<!DOCTYPE html style="min-height:100%">
+
+<head>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+    <meta content="keyword1,keyword2,keyword3" name="keywords" />
+    <meta content="Description of your page" name="description" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.css"/>
+    <link rel="stylesheet" href="jmob/jquery.mobile-1.3.1.css"/>
+    <link rel="stylesheet" href="css/mycss.css"/>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/jquery-1.9.0.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="jmob/jquery.mobile-1.3.1.js"></script>
+    <script type="text/javascript" src="js/flot/jquery.flot.js"></script>
+    <script type="text/javascript" src="js/numerics126.js"></script>
+    <script type="text/javascript" src="js/cordova.js"></script>
+    <style>
+        #pp1 {
+            background: url('img/opp.jpg');
+            background-repeat:repeat-y;
+            background-position:center center;
+            background-attachment:scroll;
+            background-size:cover;
+            background-attachment:fixed;
+            position:fixed;
+            height:100%;
+        }
+        a {
+            -webkit-touch-callout: none !important;
+        }
+        #covr{
+            position:fixed;
+            height:100%;
+            width:100%;
+            background:rgba(0,0,0,0.3);
+            z-index:7000;
+        }
+        #boxop{
+            background:rgba(0,0,0,0.6);
+            position:fixed;
+            top:5%;
+            left:5%;
+            width:90%;
+            height:80%;
+            z-index:10000;
+            border:2px solid black;
+        }
+        #ppe-popup {
+            top: 0 !important;
+            bottom: auto !important;
+        }
+        #ppt{
+            width:90%;
+        }
+        #ott{
+            margin-bottom:35px;
+        }
+        #closin{
+            position:relative;
+            margin-top:-2px !important;
+            left:91% !important;
+            width:10%;
+            height:30px;
+            text-align:center;
+            line-height:30px;
+            background:rgba(240,10,10,0.9);
+            color:white;
+            font-size:30px;
+            overflow:hidden;
+            z-index:10003;
+        }
+        #listin{
+            position:relative;
+            overflow-y: auto;
+            top:10px !important;
+            max-width:90%;
+            max-height:80%;
+            margin-left:5% !important;
+        }
+        #listin li{
+            background:rgba(230,230,230,0.95);
+            margin-bottom:5px;
+        }
+        .innertab{
+            position:relative;
+            overflow-y: auto;
+            overflow-x:none;
+            top:10px !important;
+            max-width:90%;
+            max-height:50%;
+            margin-left:5% !important;
+            border:1px white;
+        }
+        .newtab{
+            position:relative;
+            width:90%;
+        }
+        .newtab th{
+            width:50%;
+            background:rgba(240,240,240,0.8);
+        }
+        .newtab td{
+            width:50%;
+            background:rgba(10,10,10,0.5);
+            color:white;
+            padding: 8px;
+            text-align:center;
+            border:1px solid black;
+        }
+        </style>
+    
+    
+    <!--<script>$( "#thingi2" ).click(function() {$( "#wong" ).toggle( "blind", 750 );});</script>-->
+</head>
+
+<body>
+    <div data-role="page" id="pp1">
+        <script type="text/javascript">
+            $(document).on('pageinit',function(){
+                           $("#covr").hide()
+                           plp();
+                           });
+            
+            function plp(){
+                var checkn = localStorage.getItem("eras");
+                if(checkn==0){
+                    var number = localStorage.getItem("number");
+                    var names = JSON.parse(localStorage["namet"]);
+                    var timeh  = JSON.parse(localStorage["timeh"]);
+                    var timem  = JSON.parse(localStorage["timem"]);
+                    var times  = JSON.parse(localStorage["times"]);
+                    var yyears = JSON.parse(localStorage["yyears"]);
+                    var dayofm = JSON.parse(localStorage["dayofm"]);
+                    var months = JSON.parse(localStorage["months"]);
+                    var weekd = JSON.parse(localStorage["weekd"]);
+                    var check = 0;
+                    for(var i=0;i<number;i++){
+                        var osmose = names[i];
+                        var day = dayofm[i];
+                        var years = yyears[i];
+                        var month = months[i];
+                        if((i!=0)&&(names[i]==names[i-1])){
+                            $("#omega").append('<li data-icon=false><a href="#">'+'<p style="color:#990000;font-size:14px">'+osmose+' '+'('+(i-check)+')'+'</p>'+
+                                               ' on '+day+'/'+month+'/'+years+'</a></li>');
+                        }else{
+                            $("#omega").append('<li data-icon=false><a href="#">'+'<p style="color:#990000;font-size:14px">'+osmose+'</p>'+' on '+day+'/'+month+'/'+years+'</a></li>');
+                            check=i;
+                        }
+                        $("#omega").listview("refresh");
+                    }
+                    $('#omega li').click(function() {
+                                         var index = $(this).index();
+                                         var text = $(this).text();
+                                         plop(index);
+                                         });
+                    $('#omega li').css("background","rgba(240,240,240,0.8)");
+                    $('#omega li').swiperight(function() {
+                                              var index = $(this).index();
+                                              var text = $(this).text();
+                                              var collh = JSON.parse(localStorage["arr2"]);
+                                              var leng2 = JSON.parse(localStorage["leng2"]);
+                                              var leng = JSON.parse(localStorage["leng"]);
+                                              var names = JSON.parse(localStorage["namet"]);
+                                              var colld  =JSON.parse(localStorage["arr"]);
+                                              var timeh  = JSON.parse(localStorage["timeh"]);
+                                              var timem  = JSON.parse(localStorage["timem"]);
+                                              var times  = JSON.parse(localStorage["times"]);
+                                              var yyears = JSON.parse(localStorage["yyears"]);
+                                              var dayofm = JSON.parse(localStorage["dayofm"]);
+                                              var months = JSON.parse(localStorage["months"]);
+                                              var weekd = JSON.parse(localStorage["weekd"]);
+                                              var sum=0;
+                                              var sum2=0;
+                                              for(var i=0;i<index;i++){
+                                              sum = sum+leng2[i];
+                                              sum2 = sum2+leng[i];
+                                              }
+                                              M = new Array(leng2[index]);
+                                              H = new Array(leng2[index]);
+                                              D = new Array(leng[index]);
+                                              for(var i=0;i<(leng2[index]);i++){
+                                              M[i]=collh[sum+i][0];
+                                              H[i]=collh[sum+i][1];
+                                              D[i]=colld[sum2+i][1];
+                                              }
+                                              for(var i=0;i<(leng[index]);i++){
+                                              D[i]=colld[sum2+i][1];
+                                              }
+                                              var maxd = Math.max.apply(Math,D);
+                                              var mind = Math.min.apply(Math,D);
+                                              var trans= D[leng[index]-1];
+                                              $("#sometin li").eq(0).text("Name: "+names[index].toString());
+                                              $("#sometin li").eq(1).text("Date created: "+dayofm[index]+"/"+months[index]+"/"+yyears[index]+", "+timeh[index]+":"+timem[index]+":"+times[index]);
+                                              $("#sometin li").eq(2).text("Model used: stochastic, OU");
+                                              $("#sometin li").eq(3).text('#Data: '+leng2[index].toString());
+                                              $("#sometin li").eq(5).css("padding-bottom","-5px");
+                                              $("#sometin li").eq(6).text("Size: 236 KB");
+                                              $("#sometin li").eq(7).text("Min: "+mind.toString()+"; Max: "+maxd.toString());
+                                              $("#sometin li").eq(8).text("Last predicted value: "+trans.toString());
+                                              $("#sometin li").eq(9).text("Aim set: /.");
+                                              $("#ink td").remove();
+                                
+                                              for(var i=0;i<M.length;i++){
+                                              $("#ink tbody").append($('<tr>').append($('<td>').text(M[i].toString())).append($('<td>').text(H[i].toString())));
+                                              }
+                                              var plotd=colld.splice(sum2,leng[index]);
+                                              var ploth=collh.splice(sum,leng2[index]);
+                                              var data = [
+                                                          { label: names[index],
+                                                          data: plotd,
+                                                          lines: {show: true},
+                                                          points: {show:false}},
+                                                          {label: 'Real',
+                                                          data: ploth,
+                                                          lines: {show:true},
+                                                          points: {show:true}}];/*,
+                                                                                 {label: 'Std+',
+                                                                                 data: S1,
+                                                                                 lines: {show:true},
+                                                                                 points: {show:false}},
+                                                                                 {label: 'Std-',
+                                                                                 data: S2,
+                                                                                 lines: {show:true},
+                                                                                 points: {show:false}}];*/
+                                              
+                                              var options = {
+                                              legend: {
+                                              show: true,
+                                              margin: 10,
+                                              backgroundOpacity: 0.5
+                                              }
+                                              };
+                                              var mp = $("#miniplot");
+                                              var w=$(window).width();
+                                              var h=$(window).height();
+                                              mp.css("width",0.7*w);
+                                              mp.css("height",0.5*h);
+                                              var fun = $.plot( mp , data, options );
+                                              $("#sometin").listview("refresh");
+                                              $("#covr").slideDown('fast');
+                                              });
+                    $('#omega li').swipeleft(function(){
+                                             var index = $(this).index();
+                                             var text = $(this).text();
+                                             $("#omega li").eq(index).css("background","rgba(220,10,10,0.6)");
+                                             check = confirm('Delete '+text+'?')
+                                             if (check){
+                                             away(index);
+                                             $(this).remove();
+                                             ;}else{
+                                             $("#omega li").eq(index).css("background","rgba(240,240,240,0.8)");
+                                             }
+                                             
+                                             });
+                }
+            }
+            function away(index){
+                var numb2=JSON.parse(localStorage["leng2"]);
+                var numb = JSON.parse(localStorage["leng"]);
+                var collectedD = JSON.parse(localStorage["arr"]);
+                var timings=localStorage.getItem("number");
+                var collectedH = JSON.parse(localStorage["arr2"]);
+                var timeh  = JSON.parse(localStorage["timeh"]);
+                var timem  = JSON.parse(localStorage["timem"]);
+                var times  = JSON.parse(localStorage["times"]);
+                var yyears = JSON.parse(localStorage["yyears"]);
+                var dayofm = JSON.parse(localStorage["dayofm"]);
+                var months = JSON.parse(localStorage["months"]);
+                var weekd = JSON.parse(localStorage["weekd"]);
+                var namer = JSON.parse(localStorage["namet"]);
+                var sum1=0;
+                var sum2=0;
+                for(var j=0; j<index; j++){
+                    sum1 = sum1+numb2[j];
+                    sum2 = sum2+numb[j];
+                }
+                collectedD.splice(sum2,numb[index]);
+                collectedH.splice(sum1,numb2[index]);
+                timeh.splice(index,1);
+                timem.splice(index,1);
+                times.splice(index,1);
+                yyears.splice(index,1);
+                dayofm.splice(index,1);
+                weekd.splice(index,1);
+                namer.splice(index,1);
+                months.splice(index,1);
+                numb2.splice(index,1);
+                numb.splice(index,1);
+                timings=timings-1;
+                localStorage.setItem("arr2",JSON.stringify(collectedH));
+                localStorage.setItem("leng",JSON.stringify(numb));
+                localStorage.setItem("arr",JSON.stringify(collectedD));
+                localStorage.setItem("leng2",JSON.stringify(numb2));
+                localStorage.setItem("number",timings);
+                localStorage.setItem("namet",JSON.stringify(namer));
+                localStorage.setItem("timeh",JSON.stringify(timeh));
+                localStorage.setItem("timem",JSON.stringify(timem));
+                localStorage.setItem("times",JSON.stringify(times));
+                localStorage.setItem("weekd",JSON.stringify(weekd));
+                localStorage.setItem("months",JSON.stringify(months));
+                localStorage.setItem("dayofm",JSON.stringify(dayofm));
+                localStorage.setItem("yyears",JSON.stringify(yyears));
+                
+            }
+            function plop(om){
+                var id = om;
+                localStorage.setItem("ids",id);
+                var numb2=JSON.parse(localStorage["leng2"]);
+                var numb = JSON.parse(localStorage["leng"]);
+                var collectedD = JSON.parse(localStorage["arr"]);
+                var timings=localStorage.getItem("number");
+                var collectedH = JSON.parse(localStorage["arr2"]);
+                var timeh  = JSON.parse(localStorage["timeh"]);
+                var timem  = JSON.parse(localStorage["timem"]);
+                var times  = JSON.parse(localStorage["times"]);
+                var yyears = JSON.parse(localStorage["yyears"]);
+                var dayofm = JSON.parse(localStorage["dayofm"]);
+                var months = JSON.parse(localStorage["months"]);
+                var weekd = JSON.parse(localStorage["weekd"]);
+                var namer = JSON.parse(localStorage["namet"]);
+                var sum1=0;
+                var sum2=0;
+                for(var j=0; j<id; j++){
+                    sum1 = sum1+numb2[j];
+                    sum2 = sum2+numb[j];
+                }
+                var plotdatas1 = new Array(numb[id]);
+                var plotdatas2 = new Array(numb2[id]);
+                for(var j=0;j<numb[id];j++){
+                    plotdatas1[j]=new Array(2);
+                }
+                for(var j=0;j<numb2[id];j++){
+                    plotdatas2[j]=new Array(2);
+                }
+                for(var j=0;j<numb[id];j++){
+                    for(var k=0;k<2;k++){
+                        plotdatas1[j][k]=collectedD[sum2+j][k];
+                    }
+                }
+                for(var j=0;j<numb2[id];j++){
+                    for(var k=0;k<2;k++){
+                        plotdatas2[j][k]=collectedH[sum1+j][k];
+                    }
+                }
+                var dta = namer[om];
+                /*document.getElementById("tli").innerHTML="Recorded on "+weekd[i-1]+", the "+dayofm[i-1]+"."+months[i-1]+"."+yyears[i-1]+", "+timeh[i-1]+":"+timem[i-1]+":"+times[i-1];*/
+                var data = [
+                            { label: dta,
+                            data: plotdatas1,
+                            lines: {show: true},
+                            points: {show:false}},
+                            {label: 'Real',
+                            data: plotdatas2,
+                            lines: {show:true},
+                            points: {show:true}}];/*,
+                                                   {label: 'Std+',
+                                                   data: S1,
+                                                   lines: {show:true},
+                                                   points: {show:false}},
+                                                   {label: 'Std-',
+                                                   data: S2,
+                                                   lines: {show:true},
+                                                   points: {show:false}}];*/
+                
+                var options = {
+                    legend: {
+                        show: true,
+                        margin: 10,
+                        backgroundOpacity: 0.5
+                    }
+                };
+                var ppt = $("#ppt");
+                ppt.css("height", "400px");
+                ppt.css("width", "250px");
+                ppt.css("background","rgba(240,240,240,0.8)");
+                ppt.css("left","0 !important");
+                var fun = $.plot( ppt , data, options );
+                $("#ppe").popup("open");
+                $("#ppt").bind("taphold",function(){
+                               alert("holded!");
+                               });
+                
+            }
+            window.onorientationchange=function(){
+                alert("Changed!");
+            }
+            
+            </script>
+        
+        <div data-role="popup" style="z-index:8000" id="ppe" data-theme="a" data-transition="slidedown" class="ui-content">
+            <div id="ppt" style="padding:10px"></div>
+        </div>
+        <div id="covr">
+            <div id="boxop">
+                <div id="closin">
+                    X
+                </div>
+                <div id="listin">
+                    <ul data-role="listview" id="sometin">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li>Miniplot:
+                            <div id="miniplot" style="left:1%;margin-bottom:8px">
+                            </div>
+                        </li>
+                        <li>Short Table:
+                            <div class="innertab" style="margin-bottom:8px;">
+                                <table class="newtab" id="ink">
+                                    <thead><tr><th>Date added</th><th>Weight [kg]</th></tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script>
+            $("#closin").click(function(){
+                               $("#covr").hide();
+                               });
+            </script>
+        <div data-role="popup" id="ppM" data-theme="d" data-transition="slideup">
+            <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="d">
+                <li data-role="divider" data-theme="a">Choose an action</li>
+                <li><a href="#ppt" data-rel="popup" onclick="plop()" data-transition="slidedown" >Show Graph</a></li>
+                <li><a href="#" onclick="abr()">View details</a></li>
+                <li><a href="#" onclick="hid()">Show as Google Chart</a></li>
+                <li><a href="#" onclick="hid()">Mathematics</a></li>
+                <li><a href="#" >Delete</a></li>
+            </ul>
+        </div>
+        <div data-role="panel" data-display="overlay" id="mypanel2" data-position="right" class="lok">
+            <ul data-role="listview">
+                <!--<li data-icon="arrow-l"><a href="#" data-rel="close">Close</a></li>-->
+                <li data-role="list-divider" style="background:rgba(0,0,0,1)">Graph Library</li>
+                <li data-icon="false"><a href="page.html" data-transition="slideup" data-ajax="false">Graphs</a></li>
+                <li data-icon="false"><a href="page2.html" data-transition="slideup" data-ajax="false">Easy Table</a></li>
+                <li data-icon="false"><a href="page3.html" data-transition="slideup" data-ajax="false">Aims</a></li>
+            </ul>
+        </div>
+        <div class="bottomline" style="overflow:hidden">
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:left;background:rgba(0,0,0,0.85); height:35px" id="one"><i class="icon-globe icon-white" style="left:5px;"></i>
+                My Place
+            </div>
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:right;background:rgba(0,0,0,0.85); height:35px;" id="three"><i class="icon-th icon-white" style="left:5px;"></i>
+                Workplace
+            </div>
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; border: 2px solid grey;width:34%; margin:0 auto;background:rgba(0,0,0,0.85); height:35px;z-index:9000" id="two">
+                <i class="icon-list icon-white" style="left:5px;"></i>
+                Menu
+            </div>
+        </div>
+        <script>
+            $("#three").click(function(){
+                              $("#mypanel2").panel("open");
+                              });
+            $("#two").click(function(){
+                            $("#pptt").popup("open",{theme:"e"});
+                            });
+            $("#one").click(function(){
+                            window.location.href = "index.html";
+                            });
+            
+            </script>
+        <div id="ppa">
+        </div>
+        <div id="ott" style="margin-top:0px">
+            <ul data-role="listview" id="omega">
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

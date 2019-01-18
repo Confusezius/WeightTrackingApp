@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="javascript/functions.js" type="text/javascript"></script>
+    <script src="javascript/jquery-1.8.2.js"></script>
+    <script src="javascript/jquery-ui.js"></script>
+    <script src="javascript/jquery.flot.pack.js" language="javascript" type="text/javascript"></script>
+<meta content="keyword1,keyword2,keyword3" name="keywords" />
+<meta content="Description of your page" name="description" />
+    <style>
+        #toc{
+            margin-left:3%;
+            font-family:Times New Roman, sans-serif;
+            font-size: 14px;
+            color:red;
+        }
+        
+        #one,#two,#two1,#two2,#two3,#two4,#two4,#two5,#two6,#two7,#three{
+            margin-left:3%;
+            font-size:14px;
+            color:black;
+            font-family:Times New Roman, sans-serif;
+        }
+        #toTop {
+            width:100px;
+            border:1px solid #ccc;
+            background:#f7f7f7;
+            text-align:center;
+            padding:5px;
+            position:fixed; /* this is the magic */
+            bottom:10px; /* together with this to put the div at the bottom*/
+            right:10px;
+            cursor:pointer;
+            display:none;
+            color:#333;
+            font-family:verdana;
+            font-size:11px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="topbar">
+<div id="title">Tutorial</div>
+         <div id="leftnav">
+                <a href="index.html" >
+                      <img alt="home" src="images/home.png" />
+</a> </div>
+</div>
+
+<div id="content">
+    <div id="toc"><strong>(1) What is this app?</strong> </br> <strong>(2) How do I use this?</strong> </br> (2.1) Table </br>(2.2) Calculations </br>(2.3) My plots </br>(2.4) Body Visualizer </br>(2.5) Aim </br>(2.6) My profile </br>(2.7) Helping us!</br><strong>(3) Why would someone ever consider doing this?</strong></div>
+    </br></br>
+    <div id="one">(1) What is this app?</div>
+    <div id="two">(2) How do I use this?</div>
+    <div id="two1">(2.1) Table</div>
+    <div id="two2">(2.2) Calculations</div>
+    <div id="two3">(2.3) My plots</div>
+    <div id="two4">(2.4) Body Visualizer</div>
+    <div id="two5">(2.5) Aim</div>
+    <div id="two6">(2.6) My profile</div>
+    <div id="two7">(2.7) Helping us!</div>
+    <div id="three">(3) Reasons for this app:
+    There are many reasons!</br>
+
+    
+    </div>
+</div>
+    <div id="toTop">^ Back to Top</div>    
+    <script type="text/javascript">
+        $(function() {
+          $(window).scroll(function() {
+                           if($(this).scrollTop() != 0) {
+                           $('#toTop').fadeIn();
+                           } else {
+                           $('#toTop').fadeOut();
+                           }
+                           });
+          
+          $('#toTop').click(function() {
+                            $('body,html').animate({scrollTop:0},800);
+                            });
+          });
+        </script>
+</body>
+
+</html>

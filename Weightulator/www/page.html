@@ -1,0 +1,726 @@
+<!DOCTYPE html style="min-height:100%">
+
+<head>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+    <meta content="keyword1,keyword2,keyword3" name="keywords" />
+    <meta content="Description of your page" name="description" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="jmob/jquery.mobile-1.3.1.css">
+            <link rel="stylesheet" href="css/bootstrap.css">
+            <link rel="stylesheet" href="css/mycss.css">                
+                    <script type="text/javascript" src="js/bootstrap.js"></script>
+            <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+            <script type="text/javascript" src="jmob/jquery.mobile-1.3.1.js"></script>
+            <script type="text/javascript" src="js/jquery.flot.pack.js"></script>
+            <script type="text/javascript" src="js/numerics126.js"></script>
+            <script type="text/javascript" src="js/cordova.js"></script>
+            <script type="text/javascript" src="js/Canvas2ImagePlugin.js"></script>
+            <style>
+                #pp1 {
+                    background: url('img/p1.jpg');
+                    background-position:fixed;
+                    background-repeat:repeat-y;
+                    background-position:center center;
+                    background-size:cover;
+                    background-attachment:fixed
+                    position:fixed;
+                    height:100%;
+                }
+                .mybutton2{
+                    border-radius: 0px;
+                    font-family:"Trebuchet MS" !important;
+                    font-size: 14px !important;
+                    color:white;
+                    width: 100% !important;
+                    margin: 0 auto !important;
+                    background: rgba(100,100,100, 0.65) !important;
+                    top:0%;
+                    z-index:5000;
+                    height:45px;
+                    position:fixed;
+                }
+                .bottomline{
+                    border-radius: 0px;
+                    border-top: 1px solid grey;
+                    font-family:"Trebuchet MS" !important;
+                    font-size: 14px !important;
+                    color:white;
+                    width: 100% !important;
+                    margin: 0 auto !important;
+                    bottom:0%;
+                    z-index:5000;
+                    height:35px;
+                    position:fixed;
+                }
+                .cgroup{
+                    border-radius: 0px;
+                    border-top: 1px solid grey;
+                    font-family:"Trebuchet MS" !important;
+                    font-size: 14px !important;
+                    color:white;
+                    width: 95% !important;
+                    margin: 0 auto !important;
+                    z-index:3000;
+                    height:35px;
+                    text-align:center;
+                    line-height:35px;
+                    background:rgba(106,0,230,0.9);
+                }
+                #plotarea2{
+                    width:100%;
+                    height:600px;
+                    margin-top:50px;
+                    margin-left:0%;
+                }
+            </style>
+</head>
+
+<body>
+    <div data-role="page" id="pp1">
+        <script>
+            $(document).on("pageinit", function(){
+                           hidegc();
+                         var number = localStorage.getItem("number");
+                         $("#ok1 span").text(number);
+                         });
+            
+            function npr(){
+                ang = prompt("Your Plotname:", "");
+                if (ang != "" && ang != null){
+                    $("#button1").val("Running...");
+                    window.setTimeout(nprf,200);
+                }else{
+                    return false;
+                }
+                
+            }
+            function nprf(){
+                //prompt Plotname
+                var Hf1=JSON.parse(localStorage["Hf1"]);
+                var Hf2=JSON.parse(localStorage["Hf2"]);
+                for (var i=0; i<(Hf2.length); i++){
+                    Hf1[i]=parseFloat(Hf1[i]);
+                    Hf2[i]=parseFloat(Hf2[i]);
+                }
+                //Regression
+                var Y = Hf2;
+                var bh=Y.length;
+                var X = Hf1;
+                var q = Math.min.apply(Math, X); var p = Math.max.apply(Math, X);var d = p*10;var adi=10;var x = numeric.linspace(1,p*1.25,d);
+                var lbd = 10; var theta = 1; var sigma=0.1;var a = X.length;var b = x.length;
+                var mu = 0;
+                var Mu = 0;
+                var c = numeric.linspace(1,a,a); var d = numeric.linspace(1,b,b);
+                numeric.largeArray = Infinity;
+                var kxx =numeric.identity(b);
+                var kxX =numeric.rep([b,a],0);
+                var kXX =numeric.rep([a,a],0);
+                var kXX_theta =numeric.rep([a,a],0);
+                var kXX_theta_theta =numeric.rep([a,a],0);
+                var kXX_lbd_theta =numeric.rep([a,a],0);
+                var kXX_lbd_lbd =numeric.rep([a,a],0);
+                var kXX_lbd =numeric.rep([a,a],0);
+                var kXXd1 =numeric.rep([a,a],0);
+                var kXXd2 =numeric.rep([a,a],0);
+                var kXXa =numeric.rep([a,a],0);
+                var kXXb =numeric.rep([a,a],0);
+                var difflbd=100;
+                var k = 0;
+                var Hess = numeric.identity(2);
+                var contr = numeric.identity(2);
+                var Grad= new Array(2);
+                var vars= new Array(2);
+                vars[0]=lbd;
+                vars[1]=theta;
+                var A =numeric.identity(a);
+                var Uc=numeric.mul(Math.pow(sigma,2),A);
+                while(difflbd>0.000000001){
+                    theta = vars[1];
+                    theta2 = Math.pow(vars[1],2);
+                    lbd = vars[0];
+                    if (k==25000){
+                        break;
+                    }
+                    for (var i=0; i<a; i++){
+                        for(var j=0; j<a; j++){
+                            kXX[i][j]=theta2*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/lbd));
+                            kXX_theta[i][j]=2*theta*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/lbd));
+                            kXX_lbd[i][j]=theta2*Math.sqrt(Math.pow((X[i]-X[j]),2))/Math.pow(lbd,2)*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/lbd));
+                            kXX_lbd_theta[i][j]=2*theta*Math.sqrt(Math.pow((X[i]-X[j]),2))/Math.pow(lbd,2)*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/lbd));
+                            kXX_theta_theta[i][j]=2*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/lbd));
+                            kXX_lbd_lbd[i][j]=theta2*(Math.pow((X[i]-X[j]),2)-2*lbd*(Math.sqrt(Math.pow(X[i]-X[j],2))))/Math.pow(lbd,4)*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/lbd));;
+                            //kXXa[i][j]=theta2*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/(Math.pow(lbd+0.01,1))));
+                            //kXXb[i][j]=theta2*Math.pow(Math.E,(-1*Math.sqrt(Math.pow((X[i]-X[j]),2))/(Math.pow(lbd-0.01,1))));
+                            //kXXd2[i][j]=theta2*(Math.pow((X[i]-X[j]),2)-2*lbd*Math.sqrt(Math.pow((X[i]-X[j]),2)))/Math.pow(lbd,4)*kXX[i][j];
+                        }
+                    }
+                    
+                    var G =numeric.add(kXX,Uc);var iG=numeric.inv(G);var Ga =numeric.add(kXXa,Uc);var Gb =numeric.add(kXXb,Uc);var iGa=numeric.inv(Ga);var iGb=numeric.inv(Gb);
+                    
+                    //hessian lbd_lbd
+                    var hessian1 = numeric.dotMMbig(iG,kXX_lbd);
+                    var hessian2 = numeric.dotMMbig(numeric.mul(numeric.dotMMbig(hessian1,hessian1),-2),iG);
+                    var hessian3 = numeric.dotMMbig(iG,kXX_lbd_lbd);
+                    var hessian4 = numeric.dotMMbig(hessian3,iG);
+                    var hessian41= numeric.mul(numeric.dotVM(numeric.transpose([Y]),numeric.add(hessian4,hessian2)),-0.5);
+                    var hessian5 = numeric.dot(hessian41,Y);
+                    /*var hessian10= numeric.dotMMbig(numeric.dotMMbig(hessian1,hessian1),iG);
+                     var hessian11= numeric.mul(numeric.dotVM(numeric.transpose([Y]),hessian10),0.5);
+                     var hessian12= numeric.dot(hessian11,Y);
+                     var hessian13= numeric.add(hessian5,hessian12);*/
+                    var hessian6 = numeric.dotMMbig(iG,kXX_lbd_lbd);
+                    var hessian7 = numeric.dotMMbig(kXX_lbd,iG);
+                    var hessian71= numeric.dotMMbig(hessian7,hessian7);
+                    var hessian8 = numeric.add(numeric.mul(hessian71,-1),hessian6);
+                    var hessian9 = numeric.mul(numeric.sum(numeric.getDiag(hessian8)),0.5);
+                    var hessian_lbd_lbd = numeric.add(hessian9,hessian5);
+                    
+                    //hessian lbd_theta
+                    var hessian1 = numeric.dotMMbig(iG,kXX_theta);
+                    var hessian15= numeric.dotMMbig(iG,kXX_lbd);
+                    var hessian2 = numeric.dotMMbig(numeric.mul(numeric.dotMMbig(hessian1,hessian15),-2),iG);
+                    var hessian3 = numeric.dotMMbig(iG,kXX_lbd_theta);
+                    var hessian4 = numeric.dotMMbig(hessian3,iG);
+                    var hessian41= numeric.mul(numeric.dotVM(numeric.transpose([Y]),numeric.add(hessian4,hessian2)),-0.5);
+                    var hessian5 = numeric.dot(hessian41,Y);
+                    /*var hessian10= numeric.dotMMbig(numeric.dotMMbig(hessian1,hessian1),iG);
+                     var hessian11= numeric.mul(numeric.dotVM(numeric.transpose([Y]),hessian10),0.5);
+                     var hessian12= numeric.dot(hessian11,Y);
+                     var hessian13= numeric.add(hessian5,hessian12);*/
+                    var hessian6 = numeric.dotMMbig(iG,kXX_lbd_theta);
+                    var hessian7 = numeric.dotMMbig(kXX_lbd,iG);
+                    var hessian71= numeric.dotMMbig(kXX_theta,iG);
+                    var hessian72= numeric.dotMMbig(hessian71,hessian7);
+                    var hessian8 = numeric.add(numeric.mul(hessian72,-1),hessian6);
+                    var hessian9 = numeric.mul(numeric.sum(numeric.getDiag(hessian8)),0.5);
+                    var hessian_lbd_theta = numeric.add(hessian9,hessian5);
+                    
+                    //hessian theta_lbd
+                    var hessian1 = numeric.dotMMbig(iG,kXX_lbd);
+                    var hessian15= numeric.dotMMbig(iG,kXX_theta);
+                    var hessian2 = numeric.dotMMbig(numeric.mul(numeric.dotMMbig(hessian1,hessian15),-2),iG);
+                    var hessian3 = numeric.dotMMbig(iG,kXX_lbd_theta);
+                    var hessian4 = numeric.dotMMbig(hessian3,iG);
+                    var hessian41= numeric.mul(numeric.dotVM(numeric.transpose([Y]),numeric.add(hessian4,hessian2)),-0.5);
+                    var hessian5 = numeric.dot(hessian41,Y);
+                    /*var hessian10= numeric.dotMMbig(numeric.dotMMbig(hessian1,hessian1),iG);
+                     var hessian11= numeric.mul(numeric.dotVM(numeric.transpose([Y]),hessian10),0.5);
+                     var hessian12= numeric.dot(hessian11,Y);
+                     var hessian13= numeric.add(hessian5,hessian12);*/
+                    var hessian6 = numeric.dotMMbig(iG,kXX_lbd_theta);
+                    var hessian7 = numeric.dotMMbig(kXX_theta,iG);
+                    var hessian71= numeric.dotMMbig(kXX_lbd,iG);
+                    var hessian72= numeric.dotMMbig(hessian71,hessian7);
+                    var hessian8 = numeric.add(numeric.mul(hessian72,-1),hessian6);
+                    var hessian9 = numeric.mul(numeric.sum(numeric.getDiag(hessian8)),0.5);
+                    var hessian_theta_lbd = numeric.add(hessian9,hessian5);
+                    
+                    //hessian theta_theta
+                    var hessian1 = numeric.dotMMbig(iG,kXX_theta);
+                    var hessian2 = numeric.dotMMbig(numeric.mul(numeric.dotMMbig(hessian1,hessian1),-2),iG);
+                    var hessian3 = numeric.dotMMbig(iG,kXX_theta_theta);
+                    var hessian4 = numeric.dotMMbig(hessian3,iG);
+                    var hessian41= numeric.mul(numeric.dotVM(numeric.transpose([Y]),numeric.add(hessian4,hessian2)),-0.5);
+                    var hessian5 = numeric.dot(hessian41,Y);
+                    /*var hessian10= numeric.dotMMbig(numeric.dotMMbig(hessian1,hessian1),iG);
+                     var hessian11= numeric.mul(numeric.dotVM(numeric.transpose([Y]),hessian10),0.5);
+                     var hessian12= numeric.dot(hessian11,Y);
+                     var hessian13= numeric.add(hessian5,hessian12);*/
+                    var hessian6 = numeric.dotMMbig(iG,kXX_theta_theta);
+                    var hessian7 = numeric.dotMMbig(kXX_theta,iG);
+                    var hessian71= numeric.dotMMbig(hessian7,hessian7);
+                    var hessian8 = numeric.add(numeric.mul(hessian71,-1),hessian6);
+                    var hessian9 = numeric.mul(numeric.sum(numeric.getDiag(hessian8)),0.5);
+                    var hessian_theta_theta = numeric.add(hessian9,hessian5);
+                    
+                    Hess[0][0]=hessian_lbd_lbd;
+                    Hess[0][1]=hessian_lbd_theta;
+                    Hess[1][0]=hessian_theta_lbd;
+                    Hess[1][1]=hessian_theta_theta;
+                    /*var f1 = numeric.dot(numeric.dotVM(numeric.mul(numeric.transpose([Y]),0.5),iG),Y);
+                    var GG = G;
+                    var f2 = Math.log(numeric.det(GG));
+                    var ff = f1+f2;
+                    
+                    var f3 = numeric.dot(numeric.dotVM(numeric.mul(numeric.transpose([Y]),0.5),iGa),Y);
+                    var GG = Ga;
+                    var f4 = Math.log(numeric.det(GG));
+                    var ffa = f3+f4;
+                    
+                    var f5 = numeric.dot(numeric.dotVM(numeric.mul(numeric.transpose([Y]),0.5),iGb),Y);
+                    var GG = Gb;
+                    var f6 = Math.log(numeric.det(GG));
+                    var ffb = f6+f5;
+                    
+                    var ffhessian = (ffa-2*ff+ffb)/Math.pow(0.01,2);
+                    var ffgradient= (ffa-ff)/0.01;*/
+                    
+                    var gradient1 = numeric.dotMMbig(iG,kXX_lbd);
+                    var gradient2 = numeric.dotMMbig(gradient1,iG);
+                    var gradient3 = numeric.mul(numeric.dotVV(numeric.transpose([Y]),numeric.dotMV(gradient2,Y)),0.5);
+                    var gradient4 = numeric.dotMMbig(iG,kXX_lbd);
+                    var gradient5 = numeric.mul(numeric.sum(numeric.getDiag(gradient4)),0.5);
+                    var gradient_lbd = numeric.add(-1*gradient3,gradient5);
+                    
+                    var gradient1 = numeric.dotMMbig(iG,kXX_theta);
+                    var gradient2 = numeric.dotMMbig(gradient1,iG);
+                    var gradient3 = numeric.mul(numeric.dotVV(numeric.transpose([Y]),numeric.dotMV(gradient2,Y)),0.5);
+                    var gradient4 = numeric.dotMMbig(iG,kXX_theta);
+                    var gradient5 = numeric.mul(numeric.sum(numeric.getDiag(gradient4)),0.5);
+                    var gradient_theta = numeric.add(-1*gradient3,gradient5);
+                    
+                    
+                    Grad[0]=gradient_lbd;
+                    Grad[1]=gradient_theta;
+                    var varsold=vars;
+                    vars = numeric.sub(varsold,numeric.dot(numeric.inv(Hess),Grad));
+//                    var lbdprev = lbd;
+//                    lbd=lbdprev-ffgradient/ffhessian;
+                    difflbd = Math.pow(Grad[0]+Grad[1],2);
+                    difflbd = Math.sqrt(difflbd);
+                    k=k+1;
+                }
+                lbd = vars[0];
+                theta2=Math.pow(vars[1],2);
+                alert(vars);
+                //optimization
+                //for
+                //for (var i=0; i<a; i++){
+                //    for(var j=0; j<a; j++){
+                //        kXX[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((X[i]-X[j]),2)/(Math.pow(lbd,2))));
+                //    }
+                //}
+                
+                //optimization end
+                for (var i=0; i<b; i++){
+                    for(var j=0; j<b; j++){
+                        kxx[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((x[i]-x[j]),2)/lbd));
+                    }
+                }
+                for (var i=0; i<b; i++){
+                    for(var j=0; j<a; j++){
+                        kxX[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((x[i]-X[j]),2)/lbd));
+                    }
+                }
+                for (var i=0; i<a; i++){
+                    for(var j=0; j<a; j++){
+                        kXX[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((X[i]-X[j]),2)/lbd));
+                    }
+                }
+                var G =numeric.add(kXX,Uc);var iG=numeric.inv(G);
+                var pM1=numeric.dotMMbig(kxX,iG);var Ym=numeric.sub(Y,Mu);
+                var pM2=numeric.dotMV(pM1,Ym);
+                var pM3=numeric.addVS(pM2,mu);
+                var pM=pM3
+                var pt=numeric.dotMMbig(numeric.dotMMbig(kxX,iG),numeric.transpose(kxX));var pV=numeric.transpose(numeric.sub(kxx,pt));
+                var ee1=numeric.getDiag(pV);var ee2=numeric.sqrt([ee1]);var pS=numeric.transpose([ee2])
+                
+                var H = new Array(2);var hx= new Array(2);
+                for (var i = 0; i < 2; i++) {H[i] = new Array(a); hx[i] = new Array(b);}
+                for (var i = 0; i < a; i++) {H[0][i]=1; H[1][i]=X[i];}
+                for (var i = 0; i < b; i++) {hx[0][i]=1; hx[1][i]=x[i];}
+                
+                var R1 = numeric.dotMMbig(H,iG);var R  = numeric.sub(hx,numeric.dotMMbig(R1,numeric.transpose(kxX)));
+                var bb1=numeric.dotMMbig(H,iG);var bb2=numeric.inv(numeric.dot(bb1,numeric.transpose(H)));var bb3=numeric.dotMV(H,numeric.dotMV(iG,Y));var bbar=numeric.dotMV(bb2,bb3);
+                var vm1= numeric.dotMV(numeric.transpose(R),bbar);varmean = numeric.addVV(vm1,pM);
+                var varv1=numeric.dotMMbig(H,iG);var varv2=numeric.inv(numeric.dotMMbig(varv1,numeric.transpose(H)));var varv3=numeric.dotMMbig(numeric.transpose(R),varv2);var varv4=numeric.dotMMbig(varv3,R);var varvar=numeric.add(pV,varv4);
+                var nS1=numeric.getDiag(varvar);var newpS=numeric.sqrt(nS1);
+                alert('Calculation finished!');
+                
+                var D = new Array(2); var S1 = new Array(2); var S2 = new Array(2);
+                for (var i=0; i<2; i++){
+                    D[i]=new Array(b);
+                    S1[i]=new Array(b);
+                    S2[i]=new Array(b);
+                }
+                for (var i=0; i<b; i++){
+                    D[0][i]=x[i];
+                    D[1][i]=varmean[i];
+                    S1[0][i]=x[i];
+                    S1[1][i]=varmean[i]+newpS[i];
+                    S2[0][i]=x[i];
+                    S2[1][i]=varmean[i]-newpS[i];
+                }
+                
+                var Dgc = new Array(2);
+                for (var i=0; i<2; i++){
+                    Dgc[i]=new Array(b+1);
+                }
+                for (var i=1; i<(b+1); i++){
+                    Dgc[0][i]=x[i];
+                    Dgc[1][i]=varmean[i];
+                }
+                Dgc[0][0]="Time [Days]";
+                Dgc[1][0]="Weight [kg]";
+                for (var i=0; i<a;i++){H[0][i]=X[i];H[1][i]=Y[i];}
+                D=numeric.transpose(D);
+                Dgc=numeric.transpose(Dgc);
+                S1=numeric.transpose(S1);
+                S2=numeric.transpose(S2);
+                H=numeric.transpose(H);
+                //var gc = localStorage.getItem("cb1");
+                //Plot
+                //document.getElementById("plotarea").style.display="run-in";
+                var dta = ang;//.toString();
+                var data = [
+                            { label: dta,
+                            data: D,
+                            lines: {show: true},
+                            points: {show:false}},
+                            {label: 'Real',
+                            data: H,
+                            lines: {show:true},
+                            points: {show:true}}];/*,
+                                                   {label: 'Std+',
+                                                   data: S1,
+                                                   lines: {show:true},
+                                                   points: {show:false}},
+                                                   {label: 'Std-',
+                                                   data: S2,
+                                                   lines: {show:true},
+                                                   points: {show:false}}];*/
+                
+                var options = {
+                    legend: {
+                        show: true,
+                        margin: 10,
+                        backgroundOpacity: 0.5
+                    }
+                };
+                var plotarea = $("#plotarea");
+                var width = $(window).width();
+                var height = $(window).height();
+                plotarea.css("height", height);
+                plotarea.css("width", width);
+                $.plot( plotarea , data, options );
+                localStorage["plotdataD"]=JSON.stringify(D);
+                localStorage["plotdataH"]=JSON.stringify(H);
+                localStorage["plotdataName"]=JSON.stringify(dta);
+                localStorage["gcdata"]=JSON.stringify(Dgc);
+                localStorage.setItem("eras",0);
+            }
+            function hidegc(){
+                var check = localStorage.getItem("eras");
+                if(check==0){
+                var DD=JSON.parse(localStorage["plotdataD"]);
+                var HH=JSON.parse(localStorage["plotdataH"]);
+                var nn=JSON.parse(localStorage["plotdataName"]);
+                var data = [
+                            { label: nn,
+                            data: DD,
+                            lines: {show: true},
+                            points: {show:false}},
+                            {label: 'Real',
+                            data: HH,
+                            lines: {show:true},
+                            points: {show:true}}];
+                
+                var options = {
+                    legend: {
+                        show: true,
+                        margin: 10,
+                        backgroundOpacity: 0.5
+                    }
+                };
+                var plotarea = $("#plotarea");
+                    var width = $(window).width();
+                    var height = $(window).height();
+                    plotarea.css("height", height);
+                    plotarea.css("width", width);
+                $.plot( plotarea , data, options );
+                }
+            }
+            
+            function doOnOrientationChange()
+            {
+                var heightt=((window.innerHeight).toString()).concat("px");
+                var widthh=((window.innerWidth).toString()).concat("px")
+                switch(window.orientation)
+                {
+                    case -90:
+                    var DD=JSON.parse(localStorage["plotdataD"]);
+                    var HH=JSON.parse(localStorage["plotdataH"]);
+                    var nn=JSON.parse(localStorage["plotdataName"]);
+                    var data = [
+                                { label: nn,
+                                data: DD,
+                                lines: {show: true},
+                                points: {show:false}},
+                                {label: 'Real',
+                                data: HH,
+                                lines: {show:true},
+                                points: {show:true}}];
+                    
+                    var options = {
+                        legend: {
+                            show: true,
+                            margin: 10,
+                            backgroundOpacity: 0.5
+                        }
+                    };
+                    var plotarea = $("#plotarea");
+                    var width = $(window).width();
+                    var height = $(window).height();
+                    plotarea.css("height", height);
+                    plotarea.css("width", width);
+                    $.plot( plotarea , data, options );
+                    
+                    case 90:
+                    var DD=JSON.parse(localStorage["plotdataD"]);
+                    var HH=JSON.parse(localStorage["plotdataH"]);
+                    var nn=JSON.parse(localStorage["plotdataName"]);
+                    var data = [
+                                { label: nn,
+                                data: DD,
+                                lines: {show: true},
+                                points: {show:false}},
+                                {label: 'Real',
+                                data: HH,
+                                lines: {show:true},
+                                points: {show:true}}];
+                    
+                    var options = {
+                        legend: {
+                            show: true,
+                            margin: 10,
+                            backgroundOpacity: 0.5
+                        }
+                    };
+                    var plotarea = $("#plotarea");
+                    var width = $(window).width();
+                    var height = $(window).height();
+                    plotarea.css("height", height);
+                    plotarea.css("width", width);
+                    $.plot( plotarea , data, options );
+                    
+                    break;
+                    default:
+                    var DD=JSON.parse(localStorage["plotdataD"]);
+                    var HH=JSON.parse(localStorage["plotdataH"]);
+                    var nn=JSON.parse(localStorage["plotdataName"]);
+                    var data = [
+                                { label: nn,
+                                data: DD,
+                                lines: {show: true},
+                                points: {show:false}},
+                                {label: 'Real',
+                                data: HH,
+                                lines: {show:true},
+                                points: {show:true}}];
+                    
+                    var options = {
+                        legend: {
+                            show: true,
+                            margin: 10,
+                            backgroundOpacity: 0.5
+                        }
+                    };
+                    var plotarea = $("#plotarea");
+                    var width = $(window).width();
+                    var height = $(window).height();
+                    plotarea.css("height", height);
+                    plotarea.css("width", width);
+                    $.plot( plotarea , data, options );
+                    break;
+                }
+            }
+            function saveplot(){
+                var ok=$("#ok1 span").text();
+                alert(ok);
+                var D = JSON.parse(localStorage["plotdataD"]);
+                var H = JSON.parse(localStorage["plotdataH"]);
+                var number=localStorage.getItem("number");
+                var namd=JSON.parse(localStorage["plotdataName"]);
+                var date = new Date();
+                var mday = date.getDate();
+                var dday = date.getDay();
+                var mth  = date.getMonth();
+                var years= date.getFullYear();
+                var hour = date.getHours();
+                var min  = date.getMinutes();
+                var seconds = date.getSeconds();
+                alert(date);
+                var weekdays = new Array("Sunday", "Monday", "Tuesday", "Wednesday",
+                                         "Thursday", "Friday", "Saturday");
+                var minutes = new Array("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59");
+                var secc = new Array("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59");
+                var hourd = new Array("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23");
+                months = new Array("01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31");
+                /*alert("Today is "+weekdays[dday]+", the "+mday+"."+mth+ "."+years+", "+hourd[hour]+":"+minutes[min]+":"+secc[seconds]);*/
+                alert(number);
+                
+                if (number==null||number==0){
+                    number = parseFloat(number);
+                    number = 1;
+                    var leng = [D.length];
+                    var leng2= [H.length];
+                    namd = [namd];
+                    var timeh=[hourd[hour]];
+                    var timem=[minutes[min]];
+                    var times=[secc[seconds]];
+                    var weekd=[weekdays[dday]];
+                    var months=[months[mth]];
+                    var dayofm=[mday];
+                    var yyears=[years];
+                    alert(yyears);
+                    localStorage.setItem("leng2",JSON.stringify(leng2));
+                    localStorage.setItem("arr2",JSON.stringify(H));
+                    localStorage.setItem("arr",JSON.stringify(D));
+                    localStorage.setItem("leng",JSON.stringify(leng));
+                    alert(JSON.parse(localStorage["leng"]));
+                    localStorage.setItem("number",number);
+                    alert(localStorage.getItem("number"));
+                    localStorage.setItem("namet",JSON.stringify(namd));
+                    localStorage.setItem("timeh",JSON.stringify(timeh));
+                    localStorage.setItem("timem",JSON.stringify(timem));
+                    localStorage.setItem("times",JSON.stringify(times));
+                    localStorage.setItem("months",JSON.stringify(months));
+                    localStorage.setItem("dayofm",JSON.stringify(dayofm));
+                    localStorage.setItem("yyears",JSON.stringify(yyears));
+                    localStorage.setItem("weekd",JSON.stringify(weekd));
+                    alert(JSON.parse(localStorage["weekd"]));
+                    alert(JSON.parse(localStorage["namet"]));
+                    //alert(localStorage.getItem("name"));
+                }else{
+                    number = parseFloat(number);
+                    number = number+1;
+                    var arr=JSON.parse(localStorage["arr"]);
+                    var arr2=JSON.parse(localStorage["arr2"]);
+                    var leng=JSON.parse(localStorage["leng"]);
+                    var leng2=JSON.parse(localStorage["leng2"]);
+                    var nama=JSON.parse(localStorage["namet"]);
+                    var timeh=JSON.parse(localStorage["timeh"]);
+                    var timem=JSON.parse(localStorage["timem"]);
+                    var times=JSON.parse(localStorage["times"]);
+                    var weekd=JSON.parse(localStorage["weekd"]);
+                    var dayofm=JSON.parse(localStorage["dayofm"]);
+                    var yyears=JSON.parse(localStorage["yyears"]);
+                    var tons=JSON.parse(localStorage["months"]);
+                    timeh.splice(number-1,1,hourd[hour]);
+                    timem.splice(number-1,1,minutes[min]);
+                    times.splice(number-1,1,secc[seconds]);
+                    tons.splice(number-1,1,months[mth]);
+                    dayofm.splice(number-1,1,mday);
+                    yyears.splice(number-1,1,years);
+                    weekd.splice(number-1,1,weekdays[dday]);
+                    leng.push(D.length);
+                    leng2.push(H.length);
+                    nama.splice(number-1,1,namd);
+                    arr = arr.concat(D);
+                    arr2= arr2.concat(H);
+                    localStorage.setItem("arr2",JSON.stringify(arr2));
+                    localStorage.setItem("leng",JSON.stringify(leng));
+                    localStorage.setItem("arr",JSON.stringify(arr));
+                    localStorage.setItem("leng2",JSON.stringify(leng2));
+                    localStorage.setItem("number",number);
+                    localStorage.setItem("namet",JSON.stringify(nama));
+                    localStorage.setItem("timeh",JSON.stringify(timeh));
+                    localStorage.setItem("timem",JSON.stringify(timem));
+                    localStorage.setItem("times",JSON.stringify(times));
+                    localStorage.setItem("weekd",JSON.stringify(weekd));
+                    localStorage.setItem("months",JSON.stringify(tons));
+                    localStorage.setItem("dayofm",JSON.stringify(dayofm));
+                    localStorage.setItem("yyears",JSON.stringify(yyears));
+                }
+                $("#ok1 span").text(number);
+                //navigator.notification.alert(localStorage.getItem("number"),null,"Number of saved plots:","Done");
+                /*document.getElementById("button10").setAttribute("class","btn btn-danger btn-large");
+                 $("#button10").html('Saved Plot No.'+number.toString()+'!');
+                 setTimeout(function(){
+                 document.getElementById("button10").setAttribute("class","btn btn-large");
+                 $("#button10").html('Save this plot!');
+                 },1250);*/
+                
+            }
+            window.onorientationchange = function()
+            {
+                doOnOrientationChange();
+            };
+            
+        </script>
+        <script>
+            $(document).on('pageinit',function(){
+                $("#infotab").find('tbody').append($('<tr>').append($('<td>').text("Max/Min Value:")).append($('<td>').text("Bla/Bla")));
+                $("#infotab").find('tbody').append($('<tr>').append($('<td>').text("Days covered:")).append($('<td>').text("Days")));
+                $("#infotab").find('tbody').append($('<tr>').append($('<td>').text("Last value:")).append($('<td>').text("Value")));
+                $("#infotab").find('tbody').append($('<tr>').append($('<td>').text("Deviation to Real:")).append($('<td>').text("Sigma")));
+                $("#infotab").find('tbody').append($('<tr>').append($('<td>').text("Kernel applied:")).append($('<td>').text("OrnUhl")));
+                $("#infotab").find('tbody').append($('<tr>').append($('<td>').text("Space used:")).append($('<td>').text("Bytes")));
+                           });
+        </script>
+        <div data-role="popup" id="popupMenu" data-theme="d" data-transition="slideup">
+            <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="d">
+                <li data-role="divider" data-theme="a">Choose an action</li>
+                <li><a href="#popupPanel" data-rel="popup" data-transition="pop" data-position-to="window">View details</a></li>
+                <li><a href="#" id="ok1" onclick="saveplot()">Save Plot to Library <span class="ui-li-count">00</span></a></li>
+                <li><a href="#" onclick="location.href='image.html'">Show as Google Chart</a></li>
+                <li><a href="#" >Delete</a></li>
+            </ul>
+        </div>
+        <div data-role="popup" id="popupMenu2" data-theme="d" data-close-btn="right">
+            Hello
+        </div>
+        
+        <div data-role="panel" data-display="overlay" id="mypanel2" data-position="right" class="lok" style="z-index:8900">
+            <ul data-role="listview">
+                <!--<li data-icon="arrow-l"><a href="#" data-rel="close">Close</a></li>-->
+                <li data-role="list-divider" style="background:rgba(0,0,0,1)">Graphs</li>
+                <li data-icon="false"><a href="page2.html" data-transition="slideup" data-ajax="false">Easy Table</a></li>
+                <li data-icon="false"><a href="page3.html" data-transition="slideup" data-ajax="false">Aims</a></li>
+                <li data-icon="false"><a href="plotlibrary.html" data-transition="slideup" data-ajax="false">Graph Library</a></li>
+            </ul>
+        </div>
+        <div data-role="popup" id="popupPanel" data-corners="false" data-theme="e" data-shadow="false" data-tolerance="0,0" style="padding:4px">
+            
+            <table id="infotab">
+                <caption>Graph details:</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Object</th>
+                        <th scope="col">Info</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                </tbody> 
+            </table>
+            
+        </div>
+        <div class="bottomline" style="overflow:hidden">
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:left;background:rgba(0,0,0,0.85); height:35px" id="one"><i class="icon-home icon-white" style="left:5px;"></i>
+                Home
+            </div>
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:right;background:rgba(0,0,0,0.85); height:35px;" id="three"><i class="icon-th icon-white" style="left:5px;"></i>
+                Workplace
+            </div>
+            <div style="position:relative; text-align:center; line-height:35px;bottom:0px; border: 2px solid grey;width:34%; margin:0 auto;background:rgba(0,0,0,0.85); height:35px;z-index:9000" id="two">
+                <i class="icon-list icon-white" style="left:5px;"></i>
+                Menu
+            </div>
+        </div>
+        <script>
+            $("#three").click(function(){
+                              $("#mypanel2").panel("open");
+                              });
+            $("#two").click(function(){
+                            $("#popupMenu").popup("open",{theme:"e"});
+                            });
+            $("#one").click(function(){
+                            window.location.href = "index.html";
+                            });
+            
+            </script>
+        <a data-role="button" id="button1" onclick="npr();" class="mybutton2"> Run Calculation</a>
+        <!--<button id="button7" data-shadow="false" data-corners="false" onclick="location.href='image.html'" data-inline="true" data-theme="b">G </button>-->
+        <div id="plotarea2">
+        <div id="plotarea" style="margin-left:0%;margin-top: 15px">
+        </div>
+        </div>
+    </div>
+        <!--<div style="margin-bottom:2.5%">
+         <button id="button10" data-shadow="false" data-corners="false" style="background:red" onclick="saveplot()"> Save this plot!</button>
+         </div>-->
+</body>
+
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html style="min-height:100%">
+
+<head>
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+    <meta content="keyword1,keyword2,keyword3" name="keywords" />
+    <meta content="Description of your page" name="description" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+        <link rel="stylesheet" href="jmob/jquery.mobile-1.3.1.css"/>
+            <script type="text/javascript" src="js/bootstrap.js"></script>
+            <script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+            <script type="text/javascript" src="jmob/jquery.mobile-1.3.1.js"></script>
+            <script type="text/javascript" src="js/jquery.flot.pack.js"></script>
+            <script type="text/javascript" src="js/numerics126.js"></script>
+            <script type="text/javascript" src="js/cordova.js"></script>
+    <style>
+        #ppsomething {
+            background: url('img/linedpaper_@2X.png') no-repeat center center fixed;
+            background-position:fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            background-attachment:fixed;
+            position:fixed;
+            height:100%;
+        }
+        .one-edge-shadow {
+            -webkit-box-shadow: 0 8px 6px -6px black;
+            -moz-box-shadow: 0 8px 6px -6px black;
+	        box-shadow: 0 8px 6px -6px black;
+        }
+        #inform {
+            border-radius:0.2 em;
+            border: groove 0.2em white;
+            background-color: rgba(20,2,2,0.8);
+            width:75%;
+            height:150px;
+            margin: 0 auto;
+            z-index:9999;
+            position:fixed;
+            top:30%;
+            left:12.5%;
+        }
+        #clickon{
+            border-radius:0.2 em;
+            background-image: linear-gradient(bottom, rgb(219,210,213) 21%, rgb(247,247,247) 61%, rgb(237,242,242) 81%);
+            background-image: -o-linear-gradient(bottom, rgb(219,210,213) 21%, rgb(247,247,247) 61%, rgb(237,242,242) 81%);
+            background-image: -moz-linear-gradient(bottom, rgb(219,210,213) 21%, rgb(247,247,247) 61%, rgb(237,242,242) 81%);
+            background-image: -webkit-linear-gradient(bottom, rgb(219,210,213) 21%, rgb(247,247,247) 61%, rgb(237,242,242) 81%);
+            background-image: -ms-linear-gradient(bottom, rgb(219,210,213) 21%, rgb(247,247,247) 61%, rgb(237,242,242) 81%);
+            
+            background-image: -webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.21, rgb(219,210,213)),
+            color-stop(0.61, rgb(247,247,247)),
+            color-stop(0.81, rgb(237,242,242))
+            );
+            opacity:0.8;
+            
+            position:absolute;
+            width:70%;
+            height:30px;
+            bottom:5%;
+            left:15%;
+            text-align:center;
+        }
+        #buttontext{
+            width:80%;
+            text-align:center;
+            margin-left:10%;
+            position:relative;
+            bottom:12px;
+        }
+        #heading1{
+            font-family:"Trebuchet MS", sans-serif;
+            color:white;
+            width:80%;
+            text-align:center;
+            margin-left:10%;
+            position:relative;
+            top:-12px;
+        }
+        #intext{
+            background-color:rgb(240,240,240);
+            color:black;
+            width:90%;
+            text-align:center;
+            margin-left:5%;
+            position:absolute;
+            top: 20%;
+            height:50%;
+            -moz-box-shadow:    inset 0 0 4px #000000;
+            -webkit-box-shadow: inset 0 0 4px #000000;
+            box-shadow:         inset 0 0 4px #000000;
+        }
+        .mybutton{
+            border-radius: 6px;
+            font-family:"Trebuchet MS" !important;
+            font-size: 14px !important;
+            color:black;
+            width: 200px !important;
+            margin: 0 auto !important;
+            background:#FFCC33 !important;
+        }
+        .swipebox{
+            width:100%;
+            height:400px;
+            background:greenyellow;
+        }
+        #inintext{
+            position:relative;
+            font-family:"Trebuchet MS", Verdana, Arial, Helvetica;
+            font-size:14px;
+            text-align:center;
+        }
+        .downd{
+            background:red;
+        }
+        .bottomline{
+            border-radius: 0px;
+            border-top: 1px solid grey;
+            font-family:"Trebuchet MS" !important;
+            font-size: 14px !important;
+            color:white;
+            width: 100% !important;
+            margin: 0 auto !important;
+            bottom:0%;
+            z-index:5000;
+            height:35px;
+            position:fixed;
+        }
+        .cgroup{
+            border-radius: 0px;
+            border-top: 1px solid grey;
+            font-family:"Trebuchet MS" !important;
+            font-size: 14px !important;
+            color:white;
+            width: 95% !important;
+            margin: 0 auto !important;
+            z-index:3000;
+            height:35px;
+            text-align:center;
+            line-height:35px;
+            background:rgba(106,0,230,0.9);
+        }
+
+        
+    </style>
+
+</head>
+<body>
+    <script>
+        $(document).on("pageinit", function(){
+                       $("#inform").hide();
+                       $("#mask").hide();
+                       });
+        function inform(title, textm, btext){
+            $("#mask").show();
+            $("#heading1").text(title);
+            $("#heading1").css('top','5px');            
+            $("#buttontext").text(btext);
+            $("#buttontext").css('top','5px');
+            $("#inintext").text(textm);
+            $("#inintext").css('top','5px');
+            $("#inform").slideDown('fast');
+            $("#clickon").click(function(){$("#inform").fadeOut(20);$("#mask").fadeOut(20);});
+            
+        }
+        $(function(){
+          $("#ppsomething").swipeleft(function(){
+                                 $("#mypanel2").panel("open");
+                                 });
+          $("#ppsomething").bind("taphold",function(){
+                                 $("#popupMenu").popup("open");
+                                 });
+          });
+        function mask(){
+          var width = $(window).width();
+          var height = $(window).height();
+          //$("#mask").css({"width":width;"height":height;"z-index":8000;"background":rgba(0,0,0,0.4)});
+          }
+        
+    </script>
+    
+<!--    <script>
+        function funi(){
+            var aimsd = localStorage.getItem("aimsd");
+            var aimsw = localStorage.getItem("aimsw");
+            if(aimsd==null){
+                var box1=$("#box1").val();
+                var box2=$("#box2").val();
+                var k=false;
+                var b = 1;
+                if(box1!=null&&box2!=null)
+                {
+                    var Hf2 = JSON.parse(localStorage["Hf2"]);
+                    for(var i = 0; i<Hf2.length; i++){
+                        Hf2[i] = parseFloat(Hf2[i]);
+                    }
+                    //$("#lolz").html("Loading...");
+                    while(k==false){
+                        var varmean = calcapprox(box1,box2,b);
+                        alert(varmean[varmean.length-1]+" / "+box1);
+                        if (parseFloat(box1)+0.1>varmean[varmean.length-1]){
+                            k = true;
+                        }
+                        b=b+10;
+                    }
+                    boxa=[box1];
+                    boxb=[box2];
+                    localStorage["aimsd"]=JSON.stringify(boxa);
+                    localStorage["aimsw"]=JSON.stringify(boxb);
+                    //alert(varmean);
+                    //alert("You want do lose "+Math.round(varmean[varmean.length-1]-box1)+" kg");
+                    $("#ach").append('<strong>Aim No. </strong>'+'1'+'</br>Aimed timespan: '+box2+' days; </br>Desired weight: '+box1+' kg - Currently: '+Math.round(Hf2[Hf2.length-1])+' kg</br>' +' Weight loss: '+Math.round(Hf2[Hf2.length-1]-box1)+' kg'+'</br> \n<i>Days approximated: </i>'+(b-1)+'   <i class="icon-remove"></i><hr>');
+                }
+                else
+                {
+                    alert("Please complete the prerequisites for your set aim!");
+                }
+                
+            }
+            else
+            {
+                var box1=$("#box1").val();
+                var box2=$("#box2").val();
+                if(box1!=null&&box2!=null)
+                {
+                    aimsd = JSON.parse(aimsd);
+                    aimsw=JSON.parse(aimsw);
+                    aimsd.push(box2)
+                    aimsw.push(box1);
+                    var k = false;
+                    var b=1;
+                    var Hf2 = JSON.parse(localStorage["Hf2"]);
+                    for(var i = 0; i<Hf2.length; i++){
+                        Hf2[i] = parseFloat(Hf2[i]);
+                    }
+                    while(k==false){
+                        var varmean = calcapprox(box1,box2,b);
+                        alert(varmean[varmean.length-1]+"/"+box1);
+                        if (parseFloat(box1)+0.1>varmean[varmean.length-1]){
+                            k=true;
+                        }
+                        b++;
+                    }
+                    //localStorage["vone"]=JSON.stringify(JSON.parse(localStorage["vone"]).push(varmean));
+                    localStorage["aimsd"]=JSON.stringify(aimsd);
+                    localStorage["aimsw"]=JSON.stringify(aimsw);
+                    $("#ach").append('<strong>Aim No. </strong>'+aimsd.length+'</br>Aimed timespan: '+box2+' days; </br>Desired weight: '+box1+' kg - Currently: '+Math.round(Hf2[Hf2.length-1])+ ' kg</br>' +' Weight Loss: '+Math.round(Hf2[Hf2.length-1]-box1)+' kg)'+'</br> \n<i>Days approximated: </i>'+(b-5)+' <i class="icon-remove"></i><hr>');
+                }
+                else
+                {
+                    alert("Please complete the prerequisites for your set aim!");
+                }
+            }
+        }
+        function delall(){
+            localStorage.removeItem("aimsd");
+            localStorage.removeItem("aimsw");
+        }
+        function calcapprox(b1,b2,lk){
+            var b1 = parseFloat(b1);
+            var b2 = parseFloat(b2);
+            var Hf1=JSON.parse(localStorage["Hf1"]);
+            var Hf2=JSON.parse(localStorage["Hf2"]);
+            var len = parseFloat(localStorage.getItem("dde"));
+            Hf01 = new Array(5);
+            Hf02 = new Array(5);
+            var al = Hf2.length-6;
+            for (var i=0; i<5; i++){
+                Hf01[i]=parseFloat(Hf1[al+i])-parseFloat(Hf1[al])+1;
+                Hf02[i]=parseFloat(Hf2[al+i]);
+            }
+            Hf01.push(Hf01[Hf01.length-1]+lk);
+            Hf02.push(b1);
+            //Regression
+            var Y = Hf02;
+            var bh=Y.length;
+            var X = Hf01;
+            var q = Math.min.apply(Math, X); var p = Math.max.apply(Math, X);var d = p*10;var adi=0;var x = numeric.linspace(1,p+adi,d);
+            var lbd = parseFloat(len); var theta2 = 1; var sigma=0.55;var a = X.length;var b = x.length;
+            var mu = 0;
+            var Mu = 0;
+            var c = numeric.linspace(1,a,a); var d = numeric.linspace(1,b,b);
+            numeric.largeArray = Infinity;
+            var kxx =numeric.identity(b);var kxX =numeric.rep([b,a],0);var kXX =numeric.rep([a,a],0);var kXXd1 =numeric.rep([a,a],0);var kXXd2 =numeric.rep([a,a],0);var kXXa =numeric.rep([a,a],0);var kXXb =numeric.rep([a,a],0);
+            var difflbd=100;
+            var k = 0;
+            var A =numeric.identity(a);var Uc=numeric.mul(Math.pow(sigma,2),A);
+            lbd = parseFloat(localStorage.getItem("dde"));
+            for (var i=0; i<b; i++){
+                for(var j=0; j<b; j++){
+                    kxx[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((x[i]-x[j]),2)/lbd));
+                }
+            }
+            for (var i=0; i<b; i++){
+                for(var j=0; j<a; j++){
+                    kxX[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((x[i]-X[j]),2)/lbd));
+                }
+            }
+            for (var i=0; i<a; i++){
+                for(var j=0; j<a; j++){
+                    kXX[i][j]=theta2*Math.pow(Math.E,(-1*Math.pow((X[i]-X[j]),2)/lbd));
+                }
+            }
+            
+            var G =numeric.add(kXX,Uc);var iG=numeric.inv(G);
+            var pM1=numeric.dotMMbig(kxX,iG);var Ym=numeric.sub(Y,Mu);
+            var pM2=numeric.dotMV(pM1,Ym);
+            var pM3=numeric.addVS(pM2,mu);
+            var pM=pM3
+            var pt=numeric.dotMMbig(numeric.dotMMbig(kxX,iG),numeric.transpose(kxX));var pV=numeric.transpose(numeric.sub(kxx,pt));
+            var ee1=numeric.getDiag(pV);var ee2=numeric.sqrt([ee1]);var pS=numeric.transpose([ee2])
+            
+            var H = new Array(2);var hx= new Array(2);
+            for (var i = 0; i < 2; i++) {H[i] = new Array(a); hx[i] = new Array(b);}
+            for (var i = 0; i < a; i++) {H[0][i]=1; H[1][i]=X[i];}
+            for (var i = 0; i < b; i++) {hx[0][i]=1; hx[1][i]=x[i];}
+            
+            var R1 = numeric.dotMMbig(H,iG);var R  = numeric.sub(hx,numeric.dotMMbig(R1,numeric.transpose(kxX)));
+            var bb1=numeric.dotMMbig(H,iG);var bb2=numeric.inv(numeric.dot(bb1,numeric.transpose(H)));var bb3=numeric.dotMV(H,numeric.dotMV(iG,Y));var bbar=numeric.dotMV(bb2,bb3);
+            var vm1= numeric.dotMV(numeric.transpose(R),bbar);varmean = numeric.addVV(vm1,pM);
+            var varv1=numeric.dotMMbig(H,iG);var varv2=numeric.inv(numeric.dotMMbig(varv1,numeric.transpose(H)));var varv3=numeric.dotMMbig(numeric.transpose(R),varv2);var varv4=numeric.dotMMbig(varv3,R);var varvar=numeric.add(pV,varv4);
+            
+            var nS1=numeric.getDiag(varvar);var newpS=numeric.sqrt(nS1);
+            return varmean;
+            
+        }
+        </script>-->
+    <div data-role="page" id="ppsomething">
+        <div id="mask"></div>        
+    <h4 style="margin-left:5%">Aims you've set so far:<h4>
+        <div data-role="popup" id="popupMenu" data-theme="d" data-transition="slideup" style="z-index:9998">
+            <ul data-role="listview" data-inset="true" style="min-width:210px;" data-theme="d">
+                <li data-role="divider" data-theme="a">Choose an action</li>
+                <li><a href="#" data-rel="popup" data-transition="pop" data-position-to="window">Style</a></li>
+                <li><a href="#" id="ok1" onclick="saveplot()">Refresh</a></li>
+                <li><a href="#" onclick="location.href='image.html'">Save aims</a></li>
+                <li><a href="#" >Delete</a></li>
+            </ul>
+        </div>
+        <div data-role="panel" data-display="overlay" id="mypanel2" data-position="right"data-theme="c" style="z-index:9999">
+            <ul data-role="listview" data-theme="d">
+                <!--<li data-icon="arrow-l"><a href="#" data-rel="close">Close</a></li>-->
+                <li data-role="list-divider" data-theme="a">Graphs</li>
+                <li data-icon="arrow-r"><a href="page2.html" data-transition="slideup" data-ajax="false">Easy Table</a></li>
+                <li data-icon="arrow-r"><a href="page3.html" data-transition="slideup" data-ajax="false">Aims</a></li>
+                <li data-icon="arrow-r"><a href="plotlibrary.html" data-transition="slideup" data-ajax="false">Graph Library</a></li>
+            </ul>
+        </div>
+        <!--<div id="aims">
+            <div class="cgroup" onclick="checkn()">This is an aim!</div>
+            <div class="cgroup">This is an aim!</div>            
+        </div>
+        <script>
+            function checkn(){
+                inform("Hi","End","how are you?");
+            }
+        </script>
+        <div data-role="fieldcontain" id="things">
+            <fieldset>
+                <button id="blasst">Append Check!</button>
+            </fieldset>
+        </div>
+        <script>
+            /*$("#blasst").click(function(){$("#lolz").append('<input type="checkbox" class="custom"/>')});*/
+        </script>-->
+
+    <div class="bottomline" style="overflow:hidden">
+        <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:left;background:rgba(0,0,0,0.85); height:35px" id="one"><i class="icon-home icon-white" style="left:5px;"></i>
+            Home
+        </div>
+        <div style="position:relative; text-align:center; line-height:35px;bottom:0px; width:33%; float:right;background:rgba(0,0,0,0.85); height:35px;" id="three"><i class="icon-th icon-white" style="left:5px;"></i>
+            Workplace
+        </div>
+        <div style="position:relative; text-align:center; line-height:35px;bottom:0px; border: 2px solid grey;width:34%; margin:0 auto;background:rgba(0,0,0,0.85); height:35px;z-index:9000" id="two">
+            <i class="icon-list icon-white" style="left:5px;"></i>            
+            Menu
+        </div>
+    </div>
+    <script>
+        $("#three").click(function(){
+                        $("#mypanel2").panel("open");
+                        });
+        $("#two").click(function(){
+                        $("#popupMenu").popup("open",{theme:"e"});
+                        });
+        $("#one").click(function(){
+                        window.location.href = "index.html";
+                        });
+    
+    </script>
+        <div id="makelist">
+            <ul data-role="listview">
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>
+                <li>Test</li>                
+            </ul>
+        </div>
+<!--        <div id="inform" class="one-edge-shadow">
+            <div id="heading1">
+                <p>Information</p>
+            </div>
+            <div id="intext">
+                <div id="inintext">
+                <p> Some text going there! </p>
+                </div>
+            </div>
+            <div id="clickon">
+                <div id="buttontext">
+                    <p>Close</p>
+                </div>
+            </div>
+        </div>
+        <a data-role="button" class="mybutton" id="goldbut">Click!</a>
+        <a data-role="button" class="mybutton" id="goldbut2">Click2!</a>
+        <script>
+            $("#goldbut").click(function(){inform("Alert!","Object not working!","Ok");});
+            $("#goldbut2").click(function(){inform("Alert2!","Object2 not working!","Ok2");});            
+        </script>-->
+</div>
+   
+</body>
+
+</html>
+
+
